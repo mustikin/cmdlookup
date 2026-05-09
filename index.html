@@ -391,47 +391,97 @@
 
         <footer>
             <p id="commandCount">Showing 30 commands</p>
-                <p style="margin-top: 1.5rem; font-size: 0.875rem;">Built by A. B. Mustikin. Powered with ⚡Byteware Reboot. </p>
-</footer>
+             <p style="margin-top: 1.5rem; font-size: 0.875rem;">Built by A. B. Mustikin. Powered with ⚡Byteware Reboot. </p>
         </footer>
     </div>
 
     <script>
         const defaultCommands = [
+            // Network - Basic
             { id: 1, category: 'Network', name: 'Check IP Configuration', command: 'ipconfig /all', description: 'Display detailed IP config for all adapters' },
             { id: 2, category: 'Network', name: 'Flush DNS Cache', command: 'ipconfig /flushdns', description: 'Clear the DNS resolver cache' },
             { id: 3, category: 'Network', name: 'Renew IP Address', command: 'ipconfig /release && ipconfig /renew', description: 'Release and renew DHCP lease' },
             { id: 4, category: 'Network', name: 'Test Network Connectivity', command: 'ping google.com', description: 'Ping a remote host to test connectivity' },
             { id: 5, category: 'Network', name: 'Check Open Ports', command: 'netstat -ano | findstr LISTENING', description: 'List all listening ports with process IDs' },
             { id: 6, category: 'Network', name: 'Traceroute', command: 'tracert google.com', description: 'Trace route packets take to destination' },
+            { id: 31, category: 'Network', name: 'Check Network Adapter Status', command: 'wmic nic get name,status', description: 'List all network adapters and their status' },
+            { id: 32, category: 'Network', name: 'Test Port Connection', command: 'netstat -an | findstr :PORT', description: 'Check if specific port is listening (replace PORT)' },
+            { id: 33, category: 'Network', name: 'Display All Network Connections', command: 'netstat -abc', description: 'Show connections with associated process names' },
+            { id: 34, category: 'Network', name: 'Get Gateway Address', command: 'ipconfig | findstr "Gateway"', description: 'Find default gateway IP address' },
+            { id: 35, category: 'Network', name: 'Disable Network Adapter', command: 'netsh interface set interface name="Adapter Name" admin=disabled', description: 'Disable network adapter by name' },
+            { id: 36, category: 'Network', name: 'Enable Network Adapter', command: 'netsh interface set interface name="Adapter Name" admin=enabled', description: 'Enable network adapter by name' },
+            { id: 37, category: 'Network', name: 'View Routing Table', command: 'route print', description: 'Display all network routes' },
+            { id: 38, category: 'Network', name: 'Resolve Hostname to IP', command: 'nslookup google.com', description: 'DNS lookup to get IP address from hostname' },
+            { id: 39, category: 'Network', name: 'Show MAC Address', command: 'ipconfig /all | findstr "Physical Address"', description: 'Display MAC addresses of all adapters' },
 
+            // Active Directory
             { id: 7, category: 'AD', name: 'Check AD User', command: 'net user USERNAME /domain', description: 'Query Active Directory user information' },
             { id: 8, category: 'AD', name: 'Reset User Password', command: 'net user USERNAME newpassword /domain', description: 'Reset AD user password (requires domain admin)' },
             { id: 9, category: 'AD', name: 'List Domain Users', command: 'net user /domain', description: 'Display all users in the domain' },
             { id: 10, category: 'AD', name: 'Check Group Membership', command: 'net user USERNAME /domain | findstr Groups', description: 'Show AD groups for a user' },
-            { id: 11, category: 'AD', name: 'Unlock AD Account', command: 'Unlock-ADAccount -Identity USERNAME', description: 'Unlock locked domain account (PowerShell)' },
             { id: 12, category: 'AD', name: 'Query Computer AD Info', command: 'dsquery computer -name COMPUTERNAME', description: 'Find computer object in Active Directory' },
+            { id: 40, category: 'AD', name: 'List Domain Groups', command: 'net group /domain', description: 'Display all groups in the domain' },
+            { id: 41, category: 'AD', name: 'Check Group Members', command: 'net group "GroupName" /domain', description: 'List members of a specific domain group' },
+            { id: 42, category: 'AD', name: 'Find User SID', command: 'wmic useraccount where name="USERNAME" get sid', description: 'Get Security Identifier for a user' },
+            { id: 43, category: 'AD', name: 'Add User to Domain Group', command: 'net group "GroupName" USERNAME /add /domain', description: 'Add user to a domain group' },
+            { id: 44, category: 'AD', name: 'Remove User from Domain Group', command: 'net group "GroupName" USERNAME /delete /domain', description: 'Remove user from a domain group' },
+            { id: 45, category: 'AD', name: 'Check Password Expiry', command: 'net user USERNAME /domain | findstr "password"', description: 'Check password expiration details' },
+            { id: 46, category: 'AD', name: 'List Logon Hours', command: 'net user USERNAME /domain | findstr "Logon hours"', description: 'Display user logon time restrictions' },
 
+            // Disk/Storage
             { id: 13, category: 'Disk', name: 'Check Disk Space', command: 'wmic logicaldisk get name,size,freespace', description: 'Display disk space for all drives' },
             { id: 14, category: 'Disk', name: 'Disk Usage by Folder', command: 'dir /s | findstr "File(s)"', description: 'Calculate folder size recursively' },
             { id: 15, category: 'Disk', name: 'Check Disk Health', command: 'wmic logicaldisk get name, status', description: 'Check logical disk status' },
             { id: 16, category: 'Disk', name: 'List Partitions', command: 'diskpart', description: 'Launch diskpart utility (interactive)' },
             { id: 17, category: 'Disk', name: 'Format Drive', command: 'format X: /FS:NTFS /Q', description: 'Quick format drive X: to NTFS' },
             { id: 18, category: 'Disk', name: 'Check File System', command: 'chkdsk C: /F /R', description: 'Schedule disk check for next boot' },
+            { id: 47, category: 'Disk', name: 'List All Drives', command: 'wmic logicaldisk get name', description: 'Display all logical drives on system' },
+            { id: 48, category: 'Disk', name: 'Get Folder Size', command: 'dir C:\Folder /s /b | find /c ":\"', description: 'Calculate total size of a folder' },
+            { id: 49, category: 'Disk', name: 'Check Volume Label', command: 'vol C:', description: 'Display drive letter and volume label' },
+            { id: 50, category: 'Disk', name: 'Repair File System Errors', command: 'sfc /scannow', description: 'Scan and repair system file corruption' },
+            { id: 51, category: 'Disk', name: 'Check SMART Status', command: 'wmic logicaldisk get name,freespace,size', description: 'Monitor drive space and health' },
+            { id: 52, category: 'Disk', name: 'Mount Virtual Disk', command: 'diskpart', description: 'Use diskpart to mount VHD files' },
+            { id: 53, category: 'Disk', name: 'List File Permissions', command: 'icacls C:\Path', description: 'Display NTFS file permissions' },
 
+            // User Management
             { id: 19, category: 'User', name: 'Create Local User', command: 'net user USERNAME password /add', description: 'Create local user account' },
             { id: 20, category: 'User', name: 'Delete Local User', command: 'net user USERNAME /delete', description: 'Remove local user account' },
             { id: 21, category: 'User', name: 'List Local Users', command: 'net user', description: 'Display all local user accounts' },
             { id: 22, category: 'User', name: 'Add to Local Group', command: 'net localgroup Administrators USERNAME /add', description: 'Add user to administrators group' },
             { id: 23, category: 'User', name: 'Disable User Account', command: 'net user USERNAME /active:no', description: 'Disable local user account' },
             { id: 24, category: 'User', name: 'Change User Password', command: 'net user USERNAME newpassword', description: 'Change local user password' },
+            { id: 54, category: 'User', name: 'List Local Groups', command: 'net localgroup', description: 'Display all local groups on computer' },
+            { id: 55, category: 'User', name: 'View Group Members', command: 'net localgroup Administrators', description: 'Show members of a local group' },
+            { id: 56, category: 'User', name: 'Remove from Local Group', command: 'net localgroup Administrators USERNAME /delete', description: 'Remove user from local group' },
+            { id: 57, category: 'User', name: 'Enable User Account', command: 'net user USERNAME /active:yes', description: 'Enable previously disabled user' },
+            { id: 58, category: 'User', name: 'Set Password Never Expires', command: 'net user USERNAME /expires:never', description: 'Remove password expiration requirement' },
+            { id: 59, category: 'User', name: 'List User Properties', command: 'net user USERNAME', description: 'Display detailed user account information' },
+            { id: 60, category: 'User', name: 'Force User Logoff', command: 'logoff /server:SERVERNAME /v', description: 'Disconnect user session remotely' },
 
+            // System
             { id: 25, category: 'System', name: 'System Info', command: 'systeminfo', description: 'Display detailed system information' },
             { id: 26, category: 'System', name: 'List Running Processes', command: 'tasklist', description: 'Show all running processes' },
             { id: 27, category: 'System', name: 'Kill Process by PID', command: 'taskkill /PID 1234 /F', description: 'Force terminate process (replace 1234 with PID)' },
             { id: 28, category: 'System', name: 'Check Event Logs', command: 'wevtutil qe System /c:10', description: 'Query last 10 system events' },
             { id: 29, category: 'System', name: 'Clear Event Logs', command: 'wevtutil cl System', description: 'Clear system event log' },
             { id: 30, category: 'System', name: 'Restart Computer', command: 'shutdown /r /t 30 /c "Reason"', description: 'Schedule restart in 30 seconds' },
+            { id: 61, category: 'System', name: 'Shutdown Computer', command: 'shutdown /s /t 60 /c "Maintenance"', description: 'Schedule shutdown in 60 seconds' },
+            { id: 62, category: 'System', name: 'Abort Shutdown', command: 'shutdown /a', description: 'Cancel scheduled shutdown or restart' },
+            { id: 63, category: 'System', name: 'Get System Uptime', command: 'wmic os get lastbootuptime', description: 'Display when system was last booted' },
+            { id: 64, category: 'System', name: 'List Services', command: 'net start', description: 'Show all running services' },
+            { id: 65, category: 'System', name: 'Start Service', command: 'net start "Service Name"', description: 'Start a Windows service' },
+            { id: 66, category: 'System', name: 'Stop Service', command: 'net stop "Service Name"', description: 'Stop a Windows service' },
+            { id: 67, category: 'System', name: 'Check Service Status', command: 'sc query "Service Name"', description: 'Query the status of a specific service' },
+            { id: 68, category: 'System', name: 'List Installed Software', command: 'wmic product list', description: 'Display all installed applications' },
+            { id: 69, category: 'System', name: 'View Installed Updates', command: 'wmic qfe list', description: 'List all Windows updates/hotfixes' },
+            { id: 70, category: 'System', name: 'Get CPU Info', command: 'wmic cpu list', description: 'Display processor information' },
+            { id: 71, category: 'System', name: 'Get RAM Info', command: 'wmic MemPhysical list', description: 'Display physical memory capacity' },
+            { id: 72, category: 'System', name: 'Check Windows Version', command: 'wmic os get version,buildnumber', description: 'Display Windows version and build' },
+            { id: 73, category: 'System', name: 'List Environment Variables', command: 'set', description: 'Display all environment variables' },
+            { id: 74, category: 'System', name: 'Schedule Task', command: 'schtasks /create /tn "Task Name" /tr "command" /sc daily', description: 'Create a scheduled task' },
+            { id: 75, category: 'System', name: 'List Scheduled Tasks', command: 'schtasks /query /fo list', description: 'Show all scheduled tasks' },
+            { id: 76, category: 'System', name: 'Delete Scheduled Task', command: 'schtasks /delete /tn "Task Name" /f', description: 'Remove a scheduled task' },
+            { id: 77, category: 'System', name: 'Lock Screen', command: 'rundll32.exe user32.dll,LockWorkStation', description: 'Lock the computer immediately' },
         ];
 
         let customCommands = JSON.parse(localStorage.getItem('customCommands') || '[]');
