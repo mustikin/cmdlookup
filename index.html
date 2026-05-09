@@ -3,312 +3,567 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMD Lookup | IT Cheat Sheet</title>
-    <!-- React & Babel -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://unpkg.com/lucide-react@latest"></script>
+    <title>CMD Lookup - Windows Command Cheat Sheet</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .font-mono { font-family: 'Fira Code', monospace; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+            padding: 1.5rem;
+        }
+
+        .container {
+            max-width: 64rem;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #cbd5e1;
+            font-size: 1rem;
+        }
+
+        .controls {
+            margin-bottom: 2rem;
+        }
+
+        .search-wrapper {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 0.75rem;
+            color: #64748b;
+            pointer-events: none;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            background: #475569;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        #searchInput::placeholder {
+            color: #94a3b8;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: #475569;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            color: #cbd5e1;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            background: #64748b;
+        }
+
+        .filter-btn.active {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+        }
+
+        .add-command-section {
+            margin-bottom: 2rem;
+        }
+
+        .add-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #16a34a;
+            border: none;
+            border-radius: 0.5rem;
+            color: #ffffff;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-btn:hover {
+            background: #15803d;
+        }
+
+        .custom-form {
+            background: #475569;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            display: none;
+        }
+
+        .custom-form.open {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 0.75rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            background: #334155;
+            border: 1px solid #1e293b;
+            border-radius: 0.375rem;
+            color: #ffffff;
+            font-size: 0.875rem;
+        }
+
+        .form-group input::placeholder {
+            color: #64748b;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .form-buttons button {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .form-buttons .save-btn {
+            background: #16a34a;
+            color: #ffffff;
+        }
+
+        .form-buttons .save-btn:hover {
+            background: #15803d;
+        }
+
+        .form-buttons .cancel-btn {
+            background: #475569;
+            color: #ffffff;
+        }
+
+        .form-buttons .cancel-btn:hover {
+            background: #64748b;
+        }
+
+        .commands-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .command-card {
+            background: #475569;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .command-card:hover {
+            border-color: #64748b;
+        }
+
+        .command-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .command-info h3 {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .command-info p {
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        .command-category {
+            padding: 0.25rem 0.5rem;
+            background: #334155;
+            border-radius: 0.25rem;
+            color: #cbd5e1;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .command-code {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #1e293b;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+        }
+
+        .command-code code {
+            flex: 1;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: #e2e8f0;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            flex-shrink: 0;
+            padding: 0.5rem;
+            background: transparent;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            transition: color 0.3s;
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .copy-btn:hover {
+            color: #cbd5e1;
+        }
+
+        .copy-btn.copied {
+            color: #4ade80;
+        }
+
+        .delete-btn {
+            flex-shrink: 0;
+            padding: 0.5rem;
+            background: transparent;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            transition: color 0.3s;
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-btn:hover {
+            color: #f87171;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #64748b;
+        }
+
+        .empty-state p:first-child {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 1.875rem;
+            }
+
+            .command-header {
+                flex-direction: column;
+            }
+
+            .filter-buttons {
+                gap: 0.25rem;
+            }
+
+            .filter-btn {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
     </style>
 </head>
-<body class="bg-slate-900">
-    <div id="root"></div>
+<body>
+    <div class="container">
+        <header>
+            <h1>CMD Lookup</h1>
+            <p class="subtitle">Searchable cheat sheet for everyday Windows commands</p>
+        </header>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
-        const { Search, Copy, Check, Plus, X, Github, Terminal } = LucideReact;
+        <div class="controls">
+            <div class="search-wrapper">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="8" cy="8" r="6"></circle>
+                    <path d="m12 12 4 4"></path>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Search commands, names, or descriptions...">
+            </div>
 
-        const CMDLookup = () => {
-            const [searchTerm, setSearchTerm] = useState('');
-            const [selectedCategory, setSelectedCategory] = useState('All');
-            const [copiedId, setCopiedId] = useState(null);
-            const [showAddForm, setShowAddForm] = useState(false);
-            const [customName, setCustomName] = useState('');
-            const [customCommand, setCustomCommand] = useState('');
-            const [customCategory, setCustomCategory] = useState('Network');
-            const [customCommands, setCustomCommands] = useState(() => {
-                const saved = localStorage.getItem('customCommands');
-                return saved ? JSON.parse(saved) : [];
+            <div class="filter-buttons" id="filterButtons"></div>
+        </div>
+
+        <div class="add-command-section">
+            <button class="add-btn" id="addCommandBtn">
+                <span>➕</span> Add Custom Command
+            </button>
+
+            <div class="custom-form" id="customForm">
+                <div class="form-group">
+                    <input type="text" id="customName" placeholder="Command name (e.g., 'Check Disk Space')">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="customCommand" placeholder="Actual command (e.g., 'wmic logicaldisk get name,size,freespace')">
+                </div>
+                <div class="form-group">
+                    <select id="customCategory">
+                        <option value="Network">Network</option>
+                        <option value="AD">AD</option>
+                        <option value="Disk">Disk</option>
+                        <option value="User">User</option>
+                        <option value="System">System</option>
+                    </select>
+                </div>
+                <div class="form-buttons">
+                    <button class="save-btn" id="saveCustomBtn">Save</button>
+                    <button class="cancel-btn" id="cancelCustomBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="commands-grid" id="commandsGrid"></div>
+
+        <footer>
+            <p id="commandCount">Showing 30 commands</p>
+        </footer>
+    </div>
+
+    <script>
+        const defaultCommands = [
+            { id: 1, category: 'Network', name: 'Check IP Configuration', command: 'ipconfig /all', description: 'Display detailed IP config for all adapters' },
+            { id: 2, category: 'Network', name: 'Flush DNS Cache', command: 'ipconfig /flushdns', description: 'Clear the DNS resolver cache' },
+            { id: 3, category: 'Network', name: 'Renew IP Address', command: 'ipconfig /release && ipconfig /renew', description: 'Release and renew DHCP lease' },
+            { id: 4, category: 'Network', name: 'Test Network Connectivity', command: 'ping google.com', description: 'Ping a remote host to test connectivity' },
+            { id: 5, category: 'Network', name: 'Check Open Ports', command: 'netstat -ano | findstr LISTENING', description: 'List all listening ports with process IDs' },
+            { id: 6, category: 'Network', name: 'Traceroute', command: 'tracert google.com', description: 'Trace route packets take to destination' },
+
+            { id: 7, category: 'AD', name: 'Check AD User', command: 'net user USERNAME /domain', description: 'Query Active Directory user information' },
+            { id: 8, category: 'AD', name: 'Reset User Password', command: 'net user USERNAME newpassword /domain', description: 'Reset AD user password (requires domain admin)' },
+            { id: 9, category: 'AD', name: 'List Domain Users', command: 'net user /domain', description: 'Display all users in the domain' },
+            { id: 10, category: 'AD', name: 'Check Group Membership', command: 'net user USERNAME /domain | findstr Groups', description: 'Show AD groups for a user' },
+            { id: 11, category: 'AD', name: 'Unlock AD Account', command: 'Unlock-ADAccount -Identity USERNAME', description: 'Unlock locked domain account (PowerShell)' },
+            { id: 12, category: 'AD', name: 'Query Computer AD Info', command: 'dsquery computer -name COMPUTERNAME', description: 'Find computer object in Active Directory' },
+
+            { id: 13, category: 'Disk', name: 'Check Disk Space', command: 'wmic logicaldisk get name,size,freespace', description: 'Display disk space for all drives' },
+            { id: 14, category: 'Disk', name: 'Disk Usage by Folder', command: 'dir /s | findstr "File(s)"', description: 'Calculate folder size recursively' },
+            { id: 15, category: 'Disk', name: 'Check Disk Health', command: 'wmic logicaldisk get name, status', description: 'Check logical disk status' },
+            { id: 16, category: 'Disk', name: 'List Partitions', command: 'diskpart', description: 'Launch diskpart utility (interactive)' },
+            { id: 17, category: 'Disk', name: 'Format Drive', command: 'format X: /FS:NTFS /Q', description: 'Quick format drive X: to NTFS' },
+            { id: 18, category: 'Disk', name: 'Check File System', command: 'chkdsk C: /F /R', description: 'Schedule disk check for next boot' },
+
+            { id: 19, category: 'User', name: 'Create Local User', command: 'net user USERNAME password /add', description: 'Create local user account' },
+            { id: 20, category: 'User', name: 'Delete Local User', command: 'net user USERNAME /delete', description: 'Remove local user account' },
+            { id: 21, category: 'User', name: 'List Local Users', command: 'net user', description: 'Display all local user accounts' },
+            { id: 22, category: 'User', name: 'Add to Local Group', command: 'net localgroup Administrators USERNAME /add', description: 'Add user to administrators group' },
+            { id: 23, category: 'User', name: 'Disable User Account', command: 'net user USERNAME /active:no', description: 'Disable local user account' },
+            { id: 24, category: 'User', name: 'Change User Password', command: 'net user USERNAME newpassword', description: 'Change local user password' },
+
+            { id: 25, category: 'System', name: 'System Info', command: 'systeminfo', description: 'Display detailed system information' },
+            { id: 26, category: 'System', name: 'List Running Processes', command: 'tasklist', description: 'Show all running processes' },
+            { id: 27, category: 'System', name: 'Kill Process by PID', command: 'taskkill /PID 1234 /F', description: 'Force terminate process (replace 1234 with PID)' },
+            { id: 28, category: 'System', name: 'Check Event Logs', command: 'wevtutil qe System /c:10', description: 'Query last 10 system events' },
+            { id: 29, category: 'System', name: 'Clear Event Logs', command: 'wevtutil cl System', description: 'Clear system event log' },
+            { id: 30, category: 'System', name: 'Restart Computer', command: 'shutdown /r /t 30 /c "Reason"', description: 'Schedule restart in 30 seconds' },
+        ];
+
+        let customCommands = JSON.parse(localStorage.getItem('customCommands') || '[]');
+        let selectedCategory = 'All';
+
+        const searchInput = document.getElementById('searchInput');
+        const filterButtons = document.getElementById('filterButtons');
+        const commandsGrid = document.getElementById('commandsGrid');
+        const commandCount = document.getElementById('commandCount');
+        const addCommandBtn = document.getElementById('addCommandBtn');
+        const customForm = document.getElementById('customForm');
+        const customName = document.getElementById('customName');
+        const customCommand = document.getElementById('customCommand');
+        const customCategory = document.getElementById('customCategory');
+        const saveCustomBtn = document.getElementById('saveCustomBtn');
+        const cancelCustomBtn = document.getElementById('cancelCustomBtn');
+
+        function init() {
+            renderFilterButtons();
+            renderCommands();
+            searchInput.addEventListener('input', renderCommands);
+            addCommandBtn.addEventListener('click', () => customForm.classList.add('open'));
+            cancelCustomBtn.addEventListener('click', () => customForm.classList.remove('open'));
+            saveCustomBtn.addEventListener('click', addCustomCommand);
+        }
+
+        function getAllCommands() {
+            const customWithIds = customCommands.map((cmd, idx) => ({...cmd, id: 10000 + idx}));
+            return [...defaultCommands, ...customWithIds];
+        }
+
+        function renderFilterButtons() {
+            const categories = ['All', ...new Set(getAllCommands().map(cmd => cmd.category))];
+            filterButtons.innerHTML = categories.map(cat => `
+                <button class="filter-btn ${cat === 'All' ? 'active' : ''}" data-category="${cat}">${cat}</button>
+            `).join('');
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedCategory = btn.dataset.category;
+                    renderCommands();
+                });
             });
+        }
 
-            useEffect(() => {
-                localStorage.setItem('customCommands', JSON.stringify(customCommands));
-            }, [customCommands]);
+        function getFilteredCommands() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const allCommands = getAllCommands();
 
-            const defaultCommands = [
-                // Network
-                { id: 1, category: 'Network', name: 'Check IP Configuration', command: 'ipconfig /all', description: 'Display detailed IP config for all adapters' },
-                { id: 2, category: 'Network', name: 'Flush DNS Cache', command: 'ipconfig /flushdns', description: 'Clear the DNS resolver cache' },
-                { id: 3, category: 'Network', name: 'Renew IP Address', command: 'ipconfig /release && ipconfig /renew', description: 'Release and renew DHCP lease' },
-                { id: 4, category: 'Network', name: 'Test Network Connectivity', command: 'ping google.com', description: 'Ping a remote host to test connectivity' },
-                { id: 5, category: 'Network', name: 'Check Open Ports', command: 'netstat -ano | findstr LISTENING', description: 'List all listening ports with process IDs' },
-                { id: 6, category: 'Network', name: 'Traceroute', command: 'tracert google.com', description: 'Trace route packets take to destination' },
-
-                // Active Directory
-                { id: 7, category: 'AD', name: 'Check AD User', command: 'net user USERNAME /domain', description: 'Query Active Directory user information' },
-                { id: 8, category: 'AD', name: 'Reset User Password', command: 'net user USERNAME newpassword /domain', description: 'Reset AD user password (requires domain admin)' },
-                { id: 9, category: 'AD', name: 'List Domain Users', command: 'net user /domain', description: 'Display all users in the domain' },
-                { id: 10, category: 'AD', name: 'Check Group Membership', command: 'net user USERNAME /domain | findstr Groups', description: 'Show AD groups for a user' },
-                { id: 11, category: 'AD', name: 'Unlock AD Account', command: 'Unlock-ADAccount -Identity USERNAME', description: 'Unlock locked domain account (PowerShell)' },
-                { id: 12, category: 'AD', name: 'Query Computer AD Info', command: 'dsquery computer -name COMPUTERNAME', description: 'Find computer object in Active Directory' },
-
-                // Disk/Storage
-                { id: 13, category: 'Disk', name: 'Check Disk Space', command: 'wmic logicaldisk get name,size,freespace', description: 'Display disk space for all drives' },
-                { id: 14, category: 'Disk', name: 'Disk Usage by Folder', command: 'dir /s | findstr "File(s)"', description: 'Calculate folder size recursively' },
-                { id: 15, category: 'Disk', name: 'Check Disk Health', command: 'wmic logicaldisk get name, status', description: 'Check logical disk status' },
-                { id: 16, category: 'Disk', name: 'List Partitions', command: 'diskpart', description: 'Launch diskpart utility (interactive)' },
-                { id: 17, category: 'Disk', name: 'Format Drive', command: 'format X: /FS:NTFS /Q', description: 'Quick format drive X: to NTFS' },
-                { id: 18, category: 'Disk', name: 'Check File System', command: 'chkdsk C: /F /R', description: 'Schedule disk check for next boot' },
-
-                // User Management
-                { id: 19, category: 'User', name: 'Create Local User', command: 'net user USERNAME password /add', description: 'Create local user account' },
-                { id: 20, category: 'User', name: 'Delete Local User', command: 'net user USERNAME /delete', description: 'Remove local user account' },
-                { id: 21, category: 'User', name: 'List Local Users', command: 'net user', description: 'Display all local user accounts' },
-                { id: 22, category: 'User', name: 'Add to Local Group', command: 'net localgroup Administrators USERNAME /add', description: 'Add user to administrators group' },
-                { id: 23, category: 'User', name: 'Disable User Account', command: 'net user USERNAME /active:no', description: 'Disable local user account' },
-                { id: 24, category: 'User', name: 'Change User Password', command: 'net user USERNAME newpassword', description: 'Change local user password' },
-
-                // System
-                { id: 25, category: 'System', name: 'System Info', command: 'systeminfo', description: 'Display detailed system information' },
-                { id: 26, category: 'System', name: 'List Running Processes', command: 'tasklist', description: 'Show all running processes' },
-                { id: 27, category: 'System', name: 'Kill Process by PID', command: 'taskkill /PID 1234 /F', description: 'Force terminate process (replace 1234 with PID)' },
-                { id: 28, category: 'System', name: 'Check Event Logs', command: 'wevtutil qe System /c:10', description: 'Query last 10 system events' },
-                { id: 29, category: 'System', name: 'Clear Event Logs', command: 'wevtutil cl System', description: 'Clear system event log' },
-                { id: 30, category: 'System', name: 'Restart Computer', command: 'shutdown /r /t 30 /c "Reason"', description: 'Schedule restart in 30 seconds' },
-
-                // Git
-                { id: 31, category: 'Git', name: 'Check Repo Status', command: 'git status', description: 'Show the working tree status' },
-                { id: 32, category: 'Git', name: 'Add All Changes', command: 'git add .', description: 'Stage all changed files for commit' },
-                { id: 33, category: 'Git', name: 'Commit Changes', command: 'git commit -m "Your message"', description: 'Record changes to the repository' },
-                { id: 34, category: 'Git', name: 'Push to Remote', command: 'git push', description: 'Update remote refs along with associated objects' },
-                { id: 35, category: 'Git', name: 'Pull from Remote', command: 'git pull', description: 'Fetch from and integrate with another repository or a local branch' },
-                { id: 36, category: 'Git', name: 'Create New Branch', command: 'git checkout -b branch-name', description: 'Create and switch to a new branch' },
-                { id: 37, category: 'Git', name: 'View Commit History', command: 'git log --oneline --graph --all', description: 'Show commit logs in a concise format' },
-                { id: 38, category: 'Git', name: 'Merge Branch', command: 'git merge branch-name', description: 'Join two or more development histories together' },
-            ];
-
-            const allCommands = [...defaultCommands, ...customCommands.map((cmd, idx) => ({
-                ...cmd,
-                id: 1000 + idx
-            }))];
-
-            const categories = ['All', ...new Set(allCommands.map(cmd => cmd.category))];
-
-            const filteredCommands = allCommands.filter(cmd => {
-                const matchesSearch = cmd.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                     cmd.command.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                     cmd.description.toLowerCase().includes(searchTerm.toLowerCase());
+            return allCommands.filter(cmd => {
+                const matchesSearch = cmd.name.toLowerCase().includes(searchTerm) ||
+                                    cmd.command.toLowerCase().includes(searchTerm) ||
+                                    cmd.description.toLowerCase().includes(searchTerm);
                 const matchesCategory = selectedCategory === 'All' || cmd.category === selectedCategory;
                 return matchesSearch && matchesCategory;
             });
+        }
 
-            const copyToClipboard = (command, id) => {
-                navigator.clipboard.writeText(command);
-                setCopiedId(id);
-                setTimeout(() => setCopiedId(null), 2000);
-            };
+        function renderCommands() {
+            const filtered = getFilteredCommands();
 
-            const addCustomCommand = () => {
-                if (customName.trim() && customCommand.trim()) {
-                    setCustomCommands([...customCommands, {
-                        category: customCategory,
-                        name: customName,
-                        command: customCommand,
-                        description: `Custom: ${customName}`
-                    }]);
-                    setCustomName('');
-                    setCustomCommand('');
-                    setShowAddForm(false);
-                }
-            };
-
-            const removeCustom = (idx) => {
-                setCustomCommands(customCommands.filter((_, i) => i !== idx));
-            };
-
-            return (
-                <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 text-slate-100">
-                    <div className="max-w-5xl mx-auto">
-                        {/* Header */}
-                        <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                            <div>
-                                <div className="mb-6 flex justify-start">
-                                    <img src="bytewareboot.png" alt="ByteWare Logo" className="h-12 w-auto object-contain" />
+            if (filtered.length === 0) {
+                commandsGrid.innerHTML = '<div class="empty-state"><p>No commands found</p><p>Try adjusting your search or filter</p></div>';
+            } else {
+                commandsGrid.innerHTML = filtered.map(cmd => {
+                    const isCustom = cmd.id >= 10000;
+                    return `
+                        <div class="command-card">
+                            <div class="command-header">
+                                <div class="command-info">
+                                    <h3>${escapeHtml(cmd.name)}</h3>
+                                    <p>${escapeHtml(cmd.description)}</p>
                                 </div>
-                                <div className="flex items-center gap-3 mb-2">
-                                    <div className="p-2 bg-blue-600 rounded-lg shadow-lg shadow-blue-500/20">
-                                        <Terminal size={32} className="text-white" />
-                                    </div>
-                                    <h1 className="text-4xl font-bold text-white tracking-tight">CMD Lookup</h1>
-                                </div>
-                                <p className="text-slate-400">Searchable cheat sheet for everyday IT & Development commands</p>
+                                <span class="command-category">${cmd.category}</span>
                             </div>
-                            <div className="flex items-center gap-3">
-                                <a 
-                                    href="https://github.com/mustikin" 
-                                    target="_blank" 
-                                    className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-sm font-medium transition"
-                                >
-                                    <Github size={18} />
-                                    <span>GitHub Profile</span>
-                                </a>
+                            <div class="command-code">
+                                <code>${escapeHtml(cmd.command)}</code>
+                                <button class="copy-btn" onclick="copyToClipboard('${cmd.command.replace(/'/g, "&apos;")}', this)" title="Copy to clipboard">📋</button>
+                                ${isCustom ? `<button class="delete-btn" onclick="deleteCustom(${cmd.id - 10000})" title="Delete">🗑️</button>` : ''}
                             </div>
                         </div>
+                    `;
+                }).join('');
+            }
 
-                        {/* Search & Filter */}
-                        <div className="space-y-4 mb-8">
-                            <div className="relative group">
-                                <Search className="absolute left-4 top-4 text-slate-500 group-focus-within:text-blue-500 transition-colors" size={20} />
-                                <input
-                                    type="text"
-                                    placeholder="Search commands, names, or descriptions..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full pl-12 pr-4 py-4 bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-xl"
-                                />
-                            </div>
+            commandCount.textContent = `Showing ${filtered.length} command${filtered.length !== 1 ? 's' : ''}`;
+        }
 
-                            <div className="flex gap-2 flex-wrap">
-                                {categories.map(cat => (
-                                    <button
-                                        key={cat}
-                                        onClick={() => setSelectedCategory(cat)}
-                                        className={`px-4 py-2 rounded-lg font-medium text-sm transition ${
-                                            selectedCategory === cat
-                                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
-                                                : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200 border border-slate-700'
-                                        }`}
-                                    >
-                                        {cat}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
+        function addCustomCommand() {
+            if (customName.value.trim() && customCommand.value.trim()) {
+                customCommands.push({
+                    category: customCategory.value,
+                    name: customName.value,
+                    command: customCommand.value,
+                    description: `Custom: ${customName.value}`
+                });
+                localStorage.setItem('customCommands', JSON.stringify(customCommands));
 
-                        {/* Add Custom Command */}
-                        <div className="mb-8">
-                            {!showAddForm ? (
-                                <button
-                                    onClick={() => setShowAddForm(true)}
-                                    className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition shadow-lg shadow-emerald-500/20"
-                                >
-                                    <Plus size={18} /> Add Custom Snippet
-                                </button>
-                            ) : (
-                                <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 space-y-4 shadow-2xl animate-in fade-in slide-in-from-top-4 duration-300">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <input
-                                            type="text"
-                                            placeholder="Label (e.g., 'Connect to Prod DB')"
-                                            value={customName}
-                                            onChange={(e) => setCustomName(e.target.value)}
-                                            className="px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
-                                        />
-                                        <select
-                                            value={customCategory}
-                                            onChange={(e) => setCustomCategory(e.target.value)}
-                                            className="px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
-                                        >
-                                            {['Network', 'AD', 'Disk', 'User', 'System', 'Git'].map(cat => (
-                                                <option key={cat} value={cat}>{cat}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <textarea
-                                        placeholder="Command string..."
-                                        value={customCommand}
-                                        onChange={(e) => setCustomCommand(e.target.value)}
-                                        rows="2"
-                                        className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-blue-500 font-mono text-sm"
-                                    />
-                                    <div className="flex gap-3">
-                                        <button
-                                            onClick={addCustomCommand}
-                                            className="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition"
-                                        >
-                                            Save to Local Storage
-                                        </button>
-                                        <button
-                                            onClick={() => setShowAddForm(false)}
-                                            className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-medium transition"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                customName.value = '';
+                customCommand.value = '';
+                customForm.classList.remove('open');
 
-                        {/* Commands List */}
-                        <div className="grid grid-cols-1 gap-4">
-                            {filteredCommands.length === 0 ? (
-                                <div className="text-center py-20 bg-slate-800/30 border border-dashed border-slate-700 rounded-2xl">
-                                    <div className="mb-4 flex justify-center">
-                                        <Search size={48} className="text-slate-700" />
-                                    </div>
-                                    <p className="text-xl font-semibold text-slate-500">No matches found</p>
-                                    <p className="text-slate-600 mt-1">Try a different search term or category</p>
-                                </div>
-                            ) : (
-                                filteredCommands.map(cmd => (
-                                    <div key={cmd.id} className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-5 hover:border-slate-500 hover:bg-slate-800 transition-all group">
-                                        <div className="flex items-start justify-between gap-4 mb-3">
-                                            <div className="flex-1">
-                                                <h3 className="text-white font-bold mb-1 group-hover:text-blue-400 transition-colors">{cmd.name}</h3>
-                                                <p className="text-slate-400 text-sm leading-relaxed">{cmd.description}</p>
-                                            </div>
-                                            <span className="px-2.5 py-1 bg-slate-700/50 rounded-md text-slate-300 text-[10px] uppercase font-bold tracking-wider border border-slate-600">
-                                                {cmd.category}
-                                            </span>
-                                        </div>
-                                        <div className="flex items-center gap-2 bg-slate-900/80 rounded-lg px-4 py-3 font-mono text-[13px] text-blue-300 border border-slate-700 overflow-hidden relative group/cmd">
-                                            <code className="flex-1 break-all pr-8">{cmd.command}</code>
-                                            <button
-                                                onClick={() => copyToClipboard(cmd.command, cmd.id)}
-                                                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 hover:bg-slate-700 rounded-md transition-all bg-slate-800 shadow-xl opacity-0 group-hover/cmd:opacity-100"
-                                                title="Copy to clipboard"
-                                            >
-                                                {copiedId === cmd.id ? (
-                                                    <Check size={16} className="text-emerald-400" />
-                                                ) : (
-                                                    <Copy size={16} className="text-slate-400 group-hover:text-white" />
-                                                )}
-                                            </button>
-                                            {cmd.id >= 1000 && (
-                                                <button
-                                                    onClick={() => removeCustom(cmd.id - 1000)}
-                                                    className="absolute right-10 top-1/2 -translate-y-1/2 p-2 hover:bg-red-900/30 rounded-md transition-all text-red-500 opacity-0 group-hover/cmd:opacity-100"
-                                                    title="Delete custom snippet"
-                                                >
-                                                    <X size={16} />
-                                                </button>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))
-                            )}
-                        </div>
+                renderFilterButtons();
+                renderCommands();
+            }
+        }
 
-                        {/* Footer */}
-                        <div className="mt-16 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-xs">
-                            <p>Showing {filteredCommands.length} command{filteredCommands.length !== 1 ? 's' : ''}</p>
-                            <p>© 2026 mustikin · Built with React & Tailwind</p>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
+        function deleteCustom(idx) {
+            customCommands.splice(idx, 1);
+            localStorage.setItem('customCommands', JSON.stringify(customCommands));
+            renderFilterButtons();
+            renderCommands();
+        }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<CMDLookup />);
+        function copyToClipboard(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = '✓';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        init();
     </script>
 </body>
 </html>
