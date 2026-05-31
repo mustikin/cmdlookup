@@ -23,6 +23,9 @@ A simple, searchable CMD command reference app for deskside IT engineers. No ins
 2. Open `index.html` in any browser
 3. That's it
 
+## Alternative Direct Access
+Go to : https://mustikin.github.io/cmdlookup/
+
 ## Deploy to GitHub Pages
 1. Push to GitHub
 2. Go to Settings → Pages
